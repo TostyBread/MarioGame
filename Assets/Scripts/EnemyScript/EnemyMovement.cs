@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    private float speed = 3f; //EnemySpeed
+    public float speed = 3f; //EnemySpeed
     private bool moveLeft = true;
 
     Rigidbody2D enemyBody; //Rigidbody
@@ -39,33 +39,19 @@ public class EnemyMovement : MonoBehaviour
 
     void CheckCollision()
     {
-        if (!Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f))
+        if (!Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f)) // When Raycast cant detect ground anymore
         {
             ChangeDirection();
         }
     }
 
-    //private void CheckGround()
-    //{
-    //    isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck);
-
-    //    if (!isGrounded && moveLeft)
-    //    {
-    //        moveLeft = false;
-    //        ChangeDirection(-bodyScale);
-    //    }
-    //    else if (!isGrounded && !moveLeft)
-    //    {
-    //        moveLeft = true;
-    //        ChangeDirection(bodyScale);
-    //    }
-    //}
-
     void ChangeDirection() // changes the scale of the sprite left or right
     {
-        moveLeft = !moveLeft;
+        // MoveLeft will be false when ChangeDirection was initiated, but when ChangeDirection was initiate again, MoveLeft will be true
+        // Basically acts like switch (C# code is a mess)
+        moveLeft = !moveLeft; 
 
-        Vector3 scale = transform.localScale;
+        Vector3 scale = transform.localScale; // Vector3's "scale" is grabbed from whatever your ingame sprite scale value was.
         if (moveLeft)
         {
             scale.x = Mathf.Abs(scale.x);
@@ -74,7 +60,7 @@ public class EnemyMovement : MonoBehaviour
         {
             scale.x = -Mathf.Abs(scale.x);
         }
-        transform.localScale = scale;
+        transform.localScale = scale; // This is when "scale" will be sent back and override to whatever your ingame sprite scale was.
 
  
      }
