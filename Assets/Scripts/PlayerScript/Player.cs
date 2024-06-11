@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 
     public Transform RaycastCheck; //RaycastCheck
     public LayerMask RaycastGroundCheck; //The Layer that was to be checked
+    //public LayerMask RaycastEnemyCheck; // The layer meant for checking whether you stomp on enemy back
 
     void Awake() // Grabs component when it starts
     {
@@ -39,7 +40,10 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
-        isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck); //Raycast check ground collision
+        Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
+        
+        //isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck); //Raycast check ground collision
+        isGrounded = Physics2D.CircleCast(RaycastCheck.position,1f, Vector2.down, 0.1f, RaycastGroundCheck);
 
         if (isGrounded && isjumping)
         {

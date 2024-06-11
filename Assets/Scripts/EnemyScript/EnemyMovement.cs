@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    private DamageOnTouch damageOnTouch; //Bring in DamagOnTouch
+
     public float speed = 3f; //EnemySpeed
     private bool moveLeft = true;
+    public bool isHit = false;
 
     Rigidbody2D enemyBody; //Rigidbody
     Animator anim; //animation
@@ -15,6 +18,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Awake() // Grabs component when it starts
     {
+        damageOnTouch = GetComponent<DamageOnTouch>();
         enemyBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
@@ -26,15 +30,29 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        if (moveLeft) // if moveLeft isnt false
+
+        if (isHit)
         {
-            enemyBody.velocity = new Vector2(-speed, enemyBody.velocity.y);
+            EnemyHit();
         }
-        else
-        { 
-            enemyBody.velocity = new Vector2(speed, enemyBody.velocity.y); 
+        else // if Enemy isnt hit, keep moving
+        {
+            if (moveLeft) // if moveLeft isnt false
+            {
+                enemyBody.velocity = new Vector2(-speed, enemyBody.velocity.y);
+            }
+            else
+            {
+                enemyBody.velocity = new Vector2(speed, enemyBody.velocity.y);
+            }
+            CheckCollision();
         }
-        CheckCollision();
+    }
+
+    void EnemyHit()
+    {
+        anim.SetBool("IsHit", true);
+        damageOnTouch.isDead = true;
     }
 
     void CheckCollision()
@@ -45,7 +63,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    void ChangeDirection() // changes the scale of the sprite left or right
+    public void ChangeDirection() // changes the scale of the sprite left or right
     {
         // MoveLeft will be false when ChangeDirection was initiated, but when ChangeDirection was initiate again, MoveLeft will be true
         // Basically acts like switch (C# code is a mess)
