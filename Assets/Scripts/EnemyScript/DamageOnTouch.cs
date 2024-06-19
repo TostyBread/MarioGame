@@ -14,8 +14,9 @@ public class DamageOnTouch : MonoBehaviour
     private bool isFront = false;
     private bool isBack = false;
     private bool isTop = false;
+    //Player player; // Mention component from Player.cs
 
-    // Check whether the PLayer/NPC is dead
+    // Check whether the Player/NPC is dead
     public bool isDead = false;
 
     public LayerMask RaycastDamageCheck; //The Layer that was to be checked
@@ -23,9 +24,10 @@ public class DamageOnTouch : MonoBehaviour
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>(); // Need to grab EnemyMovement script first
+        //player = GetComponent<Player>(); // grab component from Player.cs
     }
 
-    void FixedUpdate()
+    private void Update()
     {
         CheckCollision();
     }
@@ -52,7 +54,8 @@ public class DamageOnTouch : MonoBehaviour
 
             if (isTop) // When Raycast detect something on Top
             {
-                //print("Damage on Top");
+                print("Damage on Top");
+                //player.isOnTopEnemy = true;
                 enemyMovement.isHit = true; // tell EnemyMovement to stop once getting hit
             }
         }

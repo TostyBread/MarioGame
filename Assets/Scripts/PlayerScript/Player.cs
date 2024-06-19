@@ -6,9 +6,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private float speed = 4f; //player speed
-    protected float jumpspeed = 7.5f; //player jump
+    protected float jumpspeed = 7.561f; //player jump
     private bool isjumping = false; // check if player is jumping
     private bool isGrounded = false; // check if player is grounded
+    //public bool isOnTopEnemy = false; // check if player is on top of enemy
 
     Rigidbody2D myBody; //Rigidbody
     Animator anim; //animation
@@ -43,14 +44,23 @@ public class Player : MonoBehaviour
         Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
         
         //isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck); //Raycast check ground collision
-        isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.2f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground
+        isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.33f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground 
 
         if (isGrounded && isjumping)
         {
-            // Jumped before
-            isjumping = false;
-            anim.SetBool("Jump", false);
+            AllowJump();
         }
+        //else if (isOnTopEnemy && isjumping)
+        //{
+        //    AllowJump();
+        //}
+    }
+
+    private void AllowJump()
+    {
+        // Jumped before
+        isjumping = false;
+        anim.SetBool("Jump", false);
     }
 
     private void PlayerJump() // Spacebar jump movement

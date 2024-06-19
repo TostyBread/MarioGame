@@ -129,6 +129,7 @@ MonoBehaviour:
   RaycastCheckFront: {fileID: 8944409838456121125}
   RaycastCheckBack: {fileID: 3157020946975355136}
   RaycastCheckTop: {fileID: 1971369368463225188}
+  isDead: 0
   RaycastDamageCheck:
     serializedVersion: 2
     m_Bits: 128
@@ -208,7 +209,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -247,7 +248,7 @@ Transform:
   m_GameObject: {fileID: 682606588981432276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.6, y: 0, z: 0}
+  m_LocalPosition: {x: -0.8, y: -0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -278,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 851071343989266594}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6, y: 0, z: 0}
+  m_LocalPosition: {x: 0.8, y: -0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -340,7 +341,7 @@ Transform:
   m_GameObject: {fileID: 7760061566454528189}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
