@@ -6,7 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private float speed = 4f; //player speed
-    private float jumpspeed = 6.5f; //player jump
+    protected float jumpspeed = 7.5f; //player jump
     private bool isjumping = false; // check if player is jumping
     private bool isGrounded = false; // check if player is grounded
 
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
         Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
         
         //isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck); //Raycast check ground collision
-        isGrounded = Physics2D.CircleCast(RaycastCheck.position,1f, Vector2.down, 0.1f, RaycastGroundCheck);
+        isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.2f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground
 
         if (isGrounded && isjumping)
         {

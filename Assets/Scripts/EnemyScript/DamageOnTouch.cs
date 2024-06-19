@@ -33,9 +33,9 @@ public class DamageOnTouch : MonoBehaviour
     void CheckCollision()
     {
         // Raycast will check and state whether its true or false
-        isFront = Physics2D.Raycast(RaycastCheckFront.position, Vector2.left, 0.1f, RaycastDamageCheck);
-        isBack = Physics2D.Raycast(RaycastCheckBack.position, Vector2.right, 0.1f, RaycastDamageCheck);
-        isTop = Physics2D.Raycast(RaycastCheckTop.position, Vector2.up, 0.1f, RaycastDamageCheck);
+        isFront = Physics2D.CircleCast(RaycastCheckFront.position, 0.5f, Vector2.left, 0.1f, RaycastDamageCheck);
+        isBack = Physics2D.CircleCast(RaycastCheckBack.position, 0.5f, Vector2.right, 0.1f, RaycastDamageCheck);
+        isTop = Physics2D.CircleCast(RaycastCheckTop.position, 0.5f, Vector2.up, 0.1f, RaycastDamageCheck);
 
         if (!isDead) // if enemy isnt dead, they can still deal damage
         {
@@ -48,7 +48,6 @@ public class DamageOnTouch : MonoBehaviour
             if (isBack) // When Raycast detect something on Back
             {
                 print("Touched on Back");
-                enemyMovement.ChangeDirection();
             }
 
             if (isTop) // When Raycast detect something on Top
