@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class VictoryZone : MonoBehaviour
 {
     public AudioClip victoryMusic; // Victory music clip
-    public float moveDuration = 1f; // Duration for moving the player
+    private float moveDuration = 2.8f; // Duration for moving the player
     private bool isPlayerWon = false; // To check if player has already won
 
     private void OnTriggerEnter2D(Collider2D target)
@@ -34,8 +34,9 @@ public class VictoryZone : MonoBehaviour
         Vector2 originalVelocity = player.GetComponent<Rigidbody2D>().velocity;
 
         // Move player to the right for moveDuration seconds
-        while (elapsedTime > moveDuration)
+        while (elapsedTime < moveDuration)
         {
+            Debug.Log("Still walking");
             player.GetComponent<Rigidbody2D>().velocity = new Vector2(player.speed, originalVelocity.y);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -43,10 +44,12 @@ public class VictoryZone : MonoBehaviour
 
         player.GetComponent<Rigidbody2D>().velocity = originalVelocity;
 
+        player.StopMoving();
+
         // Wait until the victory music finishes playing
         yield return new WaitForSeconds(victoryMusic.length);
 
         // Load the next level (replace "NextLevel" with the actual name of the next level)
-        SceneManager.LoadScene("NextLevel");
+        SceneManager.LoadScene("Level1");
     }
 }

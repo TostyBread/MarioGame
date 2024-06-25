@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7622357585247721979}
   - component: {fileID: 2532334418861511414}
   - component: {fileID: 8998208021745052103}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: EnemySnail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ MonoBehaviour:
   isDead: 0
   RaycastDamageCheck:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
 --- !u!114 &7622357585247721979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +184,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0380857, y: -0.08349085}
+  m_Offset: {x: 0.0877558, y: -0.09877384}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -195,7 +195,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.7550786, y: 1.8349648}
+  m_Size: {x: 2.5334754, y: 1.8043988}
   m_EdgeRadius: 0
 --- !u!50 &8998208021745052103
 Rigidbody2D:
@@ -249,7 +249,7 @@ Transform:
   m_GameObject: {fileID: 682606588981432276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8, y: -0.55, z: 0}
+  m_LocalPosition: {x: -1.365, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -280,7 +280,7 @@ Transform:
   m_GameObject: {fileID: 851071343989266594}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.8, y: -0.55, z: 0}
+  m_LocalPosition: {x: 1.379, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -311,7 +311,7 @@ Transform:
   m_GameObject: {fileID: 5141276990139929619}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.37, y: -0.9, z: 0}
+  m_LocalPosition: {x: -1.297, y: -0.918, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -342,7 +342,7 @@ Transform:
   m_GameObject: {fileID: 7760061566454528189}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: -0.895, y: 0.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

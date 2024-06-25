@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class Player : MonoBehaviour
 
     private bool isjumping; // check if player is jumping
     private bool isGrounded; // check if player is grounded
-    public bool isKilled; // check if player is killed
     public bool hasWon; // disable player controls when player win
 
     //SceneLoader levelLoader; // Calls the SceneLoader
@@ -25,7 +23,6 @@ public class Player : MonoBehaviour
     void Awake() // Grabs and set component when it starts
     {
         hasWon = false;
-        isKilled = false;
         isjumping = false;
         isGrounded = false;
 
@@ -37,12 +34,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate() // Reads PlayerWalk in a constant rate
     {
-        if (isKilled)
-        {
-            PlayerKilled();
-            return;
-        }
-        else if (hasWon)
+        if (hasWon) // "Disables" controls when won
         {
             return;
         }
@@ -113,15 +105,19 @@ public class Player : MonoBehaviour
         }
         else
         {
-            myBody.velocity = new Vector2(0f, myBody.velocity.y);
+            StopMoving();
         }
-        anim.SetInteger("Speed", Mathf.Abs((int)myBody.velocity.x)); // Mathf.Abs retains either 0 or 1, so it can be useful when running animation
+        AnimationStatus();
     }
 
-    private void PlayerKilled() // When player is killed, reload the level
+    public void AnimationStatus() // Changes animation that can access from other scripts
     {
-        //levelLoader.StartLevel1();
-        SceneManager.LoadScene("Level1");
+        anim.SetInteger("Speed", Mathf.Abs((int)myBody.velocity.x)); // Mathf.Abs retains either 0 or 1, so it can be useful when running animation
+    }
+    public void StopMoving() // Make player stop moving, and it can be access by other scripts
+    {
+        myBody.velocity = new Vector2(0f, myBody.velocity.y);
+        AnimationStatus();
     }
 
     private void ChangeDirection(int direction) // changes the scale of the sprite left or right

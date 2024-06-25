@@ -225,7 +225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26696b9c9776f104ab5e4ae8c9b1ef1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 4
+  hasWon: 0
   RaycastCheck: {fileID: 2716149918674349082}
   RaycastGroundCheck:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 320
