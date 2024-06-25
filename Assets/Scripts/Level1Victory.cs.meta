@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 671f4945c3d5e7f48a1b881ceae47487
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - VictorySFX: {fileID: 8300000, guid: 00eb5f930b15aa74191e67932d5723f1, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

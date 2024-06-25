@@ -10,11 +10,7 @@ public class DamageOnTouch : MonoBehaviour
     public Transform RaycastCheckBack; //RaycastCheck Right
     public Transform RaycastCheckTop; //RaycastCheck Top
 
-    //Uses bool to check for player touch
-    private bool isFront = false;
-    private bool isBack = false;
-    private bool isTop = false;
-    //Player player; // Mention component from Player.cs
+    Player player; // Mention component from Player.cs
 
     // Check whether the Player/NPC is dead
     public bool isDead = false;
@@ -24,7 +20,7 @@ public class DamageOnTouch : MonoBehaviour
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>(); // Need to grab EnemyMovement script first
-        //player = GetComponent<Player>(); // grab component from Player.cs
+        player = GetComponent<Player>(); // grab component from Player.cs
     }
 
     private void Update()
@@ -34,31 +30,41 @@ public class DamageOnTouch : MonoBehaviour
 
     void CheckCollision()
     {
-        // Raycast will check and state whether its true or false
-        isFront = Physics2D.CircleCast(RaycastCheckFront.position, 0.5f, Vector2.left, 0.1f, RaycastDamageCheck);
-        isBack = Physics2D.CircleCast(RaycastCheckBack.position, 0.5f, Vector2.right, 0.1f, RaycastDamageCheck);
-        isTop = Physics2D.CircleCast(RaycastCheckTop.position, 0.5f, Vector2.up, 0.1f, RaycastDamageCheck);
+        RaycastHit2D hit = Physics2D.CircleCast(RaycastCheckFront.position, 0.5f, Vector2.left, 0.1f, RaycastDamageCheck);
 
-        if (!isDead) // if enemy isnt dead, they can still deal damage
+        if (hit)
         {
-            if (isFront) // When Raycast detect something on Front
+            if (!isDead)
             {
                 print("Touched on Front");
                 enemyMovement.ChangeDirection();
+                player.isKilled = true;
             }
+            return;
+        }
 
-            if (isBack) // When Raycast detect something on Back
+        hit = Physics2D.CircleCast(RaycastCheckBack.position, 0.5f, Vector2.right, 0.1f, RaycastDamageCheck);
+
+        if (hit)
+        {
+            if (!isDead)
             {
                 print("Touched on Back");
+                player.isKilled = true;
             }
+            return;
+        }
 
-            if (isTop) // When Raycast detect something on Top
+        hit = Physics2D.CircleCast(RaycastCheckTop.position, 0.5f, Vector2.up, 0.1f, RaycastDamageCheck);
+
+        if (hit)
+        {
+            if (!isDead)
             {
                 print("Damage on Top");
-                //player.isOnTopEnemy = true;
-                enemyMovement.isHit = true; // tell EnemyMovement to stop once getting hit
+                enemyMovement.isHit = true;
             }
+            return;
         }
-        else return;
     }
 }

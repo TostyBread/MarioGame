@@ -1,39 +1,51 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    private float speed = 4f; //player speed
+    public float speed = 4f; //player speed
     protected float jumpspeed = 7.561f; //player jump
-    private bool isjumping = false; // check if player is jumping
-    private bool isGrounded = false; // check if player is grounded
-    //public bool isOnTopEnemy = false; // check if player is on top of enemy
 
+    private bool isjumping; // check if player is jumping
+    private bool isGrounded; // check if player is grounded
+    public bool isKilled; // check if player is killed
+    public bool hasWon; // disable player controls when player win
+
+    //SceneLoader levelLoader; // Calls the SceneLoader
     Rigidbody2D myBody; //Rigidbody
     Animator anim; //animation
 
     public Transform RaycastCheck; //RaycastCheck
     public LayerMask RaycastGroundCheck; //The Layer that was to be checked
-    //public LayerMask RaycastEnemyCheck; // The layer meant for checking whether you stomp on enemy back
 
-    void Awake() // Grabs component when it starts
+    void Awake() // Grabs and set component when it starts
     {
+        hasWon = false;
+        isKilled = false;
+        isjumping = false;
+        isGrounded = false;
+
+        //levelLoader = GetComponent<SceneLoader>();
         myBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
-     void Update()
-    {
-        //if (Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.01f, RaycastGroundCheck)) // positon, raycast shooting direction, range, LayerMaskCheck
-        //{
-        //    print("Detected ground"); // Check if ground was detected
-        //}
-    }
 
     void FixedUpdate() // Reads PlayerWalk in a constant rate
     {
+        if (isKilled)
+        {
+            PlayerKilled();
+            return;
+        }
+        else if (hasWon)
+        {
+            return;
+        }
         PlayerWalk();
         PlayerJump();
         CheckGround();
@@ -41,7 +53,7 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
-        Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
+        //Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
         
         //isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck); //Raycast check ground collision
         isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.33f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground 
@@ -50,10 +62,6 @@ public class Player : MonoBehaviour
         {
             AllowJump();
         }
-        //else if (isOnTopEnemy && isjumping)
-        //{
-        //    AllowJump();
-        //}
     }
 
     private void AllowJump()
@@ -68,17 +76,21 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
-            if (isjumping == true)
+            if (!hasWon) // check if player has won
             {
-                return;
+                if (isjumping == true)
+                {
+                    return;
+                }
+                else // if player isnt jumping
+                {
+                    myBody.velocity = new Vector2(myBody.velocity.x, jumpspeed);
+
+                    isjumping = true;
+                }
+                anim.SetBool("Jump", true);
             }
-            else // if player isnt jumping
-            {
-                myBody.velocity = new Vector2(myBody.velocity.x, jumpspeed);
-                
-                isjumping = true;
-            }
-            anim.SetBool("Jump", true);
+            return;
         }
     }
 
@@ -106,25 +118,16 @@ public class Player : MonoBehaviour
         anim.SetInteger("Speed", Mathf.Abs((int)myBody.velocity.x)); // Mathf.Abs retains either 0 or 1, so it can be useful when running animation
     }
 
+    private void PlayerKilled() // When player is killed, reload the level
+    {
+        //levelLoader.StartLevel1();
+        SceneManager.LoadScene("Level1");
+    }
+
     private void ChangeDirection(int direction) // changes the scale of the sprite left or right
     {
         Vector3 tempScale = transform.localScale;
         tempScale.x = direction;
         transform.localScale = tempScale;
     }
-    //void OnCollisionEnter2D(Collision2D target) // OnCollisionEnter2D
-    //{
-    //    if (target.gameObject.tag == "Ground")
-    //    {
-    //        print("Entered a collision");
-    //    }
-    //}
-
-    //void OnTriggerEnter2D(Collider2D target) // OnTriggerEnter2D
-    //{
-    //    if (target.tag == "Ground")
-    //    {
-    //        print("Triggered a collision");
-    //    }
-    //}
 }

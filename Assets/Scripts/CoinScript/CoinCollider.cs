@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class CoinCollider : MonoBehaviour
 {
     [SerializeField] private CoinCounter coinCounter;
+    public AudioClip coinSound; // coin collected sound
 
     private void OnTriggerEnter2D(Collider2D target) // when player touches the coin
     {
         if (target.gameObject.tag == "Player")
         {
+            PlaySoundAtPoint(coinSound, transform.position); // plays a sound
             //print("Coins Collected");
 
             coinCounter.AddCoin();
@@ -20,4 +20,13 @@ public class CoinCollider : MonoBehaviour
         }
     }
 
+    private void PlaySoundAtPoint(AudioClip clip, Vector3 position)
+    {
+        GameObject soundGameObject = new GameObject("CoinSound");
+        AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
+        audioSource.clip = clip;
+        audioSource.Play();
+
+        Destroy(soundGameObject, clip.length); // destroy the sound game object after the clip is done playing
+    }
 }

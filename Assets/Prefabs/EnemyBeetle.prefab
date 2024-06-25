@@ -209,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   isHit: 0
+  isShell: 0
   RaycastCheck: {fileID: 161198061719972310}
   RaycastGroundCheck:
     serializedVersion: 2
@@ -310,7 +311,7 @@ Transform:
   m_GameObject: {fileID: 5682630876550876791}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4, y: -1, z: 0}
+  m_LocalPosition: {x: -1.26, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

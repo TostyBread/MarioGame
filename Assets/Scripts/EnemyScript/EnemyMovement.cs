@@ -9,6 +9,9 @@ public class EnemyMovement : MonoBehaviour
     public float speed = 3f; //EnemySpeed
     private bool moveLeft = true;
     public bool isHit = false;
+    public bool isShell = false; // Condition to check whether enemy is snail
+    private float bodyExpireTimer = 1.5f; // time till dead body despawn
+    private float currentTime; // tracks with deltaTime
 
     Rigidbody2D enemyBody; //Rigidbody
     Animator anim; //animation
@@ -34,6 +37,15 @@ public class EnemyMovement : MonoBehaviour
         if (isHit)
         {
             EnemyHit();
+
+            if (currentTime > 0)
+            {
+                currentTime -= Time.deltaTime;
+            }
+            else
+            {
+                currentTime = bodyExpireTimer;
+            }
         }
         else // if Enemy isnt hit, keep moving
         {
@@ -53,6 +65,11 @@ public class EnemyMovement : MonoBehaviour
     {
         anim.SetBool("IsHit", true);
         damageOnTouch.isDead = true;
+
+        if (currentTime < 0 && !isShell) // if timer is up for the non-shelled enemy, despawn their body
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void CheckCollision()
