@@ -225,8 +225,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26696b9c9776f104ab5e4ae8c9b1ef1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathSFX: {fileID: 8300000, guid: c5c557ab8dce48347841e11d1e9eded2, type: 3}
+  jumpSFX: {fileID: 8300000, guid: 8cf06f8663120ff4ba9b3eca261b37a9, type: 3}
   speed: 4
-  hasWon: 0
+  delayBeforeRestart: 2
+  disableControl: 0
+  isKilled: 0
+  cinemachineVirtualCamera: {fileID: 0}
   RaycastCheck: {fileID: 2716149918674349082}
   RaycastGroundCheck:
     serializedVersion: 2

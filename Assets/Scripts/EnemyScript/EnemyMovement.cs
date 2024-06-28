@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     private DamageOnTouch damageOnTouch; //Bring in DamagOnTouch
-
+    
     public float speed = 3f; //EnemySpeed
     private bool moveLeft = true;
     public bool isHit = false;
@@ -74,9 +74,11 @@ public class EnemyMovement : MonoBehaviour
 
     void CheckCollision()
     {
-        if (!Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f)) // When Raycast cant detect ground anymore
+        Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.magenta, 0.2f); // debug check ground check
+        if (!Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.2f)) // When Raycast cant detect ground anymore
         {
             ChangeDirection();
+            damageOnTouch.ToggleDirection();
         }
     }
 

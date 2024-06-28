@@ -1,40 +1,49 @@
+using Cinemachine;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public AudioClip deathSFX; // Player killed
+    public AudioClip jumpSFX; // Player jump
+
     public float speed = 4f; //player speed
     protected float jumpspeed = 7.561f; //player jump
+    public float delayBeforeRestart = 2.0f; // Delay before restart
 
     private bool isjumping; // check if player is jumping
     private bool isGrounded; // check if player is grounded
-    public bool hasWon; // disable player controls when player win
+    public bool disableControl; // disable player controls when player win
+    public bool isKilled; // check whether player is killed
 
-    //SceneLoader levelLoader; // Calls the SceneLoader
+    BoxCollider2D colliderBody; //Player's collider2D
     Rigidbody2D myBody; //Rigidbody
     Animator anim; //animation
+    public CinemachineVirtualCamera cinemachineVirtualCamera;
 
     public Transform RaycastCheck; //RaycastCheck
     public LayerMask RaycastGroundCheck; //The Layer that was to be checked
 
     void Awake() // Grabs and set component when it starts
     {
-        hasWon = false;
+        disableControl = false;
         isjumping = false;
         isGrounded = false;
+        isKilled = false;
 
-        //levelLoader = GetComponent<SceneLoader>();
+        colliderBody = GetComponent<BoxCollider2D>();
         myBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
-
     void FixedUpdate() // Reads PlayerWalk in a constant rate
     {
-        if (hasWon) // "Disables" controls when won
+        if (disableControl) // "Disables" controls when won or killed
         {
             return;
         }
@@ -68,7 +77,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
-            if (!hasWon) // check if player has won
+            if (!disableControl) // check if player has won
             {
                 if (isjumping == true)
                 {
@@ -77,7 +86,7 @@ public class Player : MonoBehaviour
                 else // if player isnt jumping
                 {
                     myBody.velocity = new Vector2(myBody.velocity.x, jumpspeed);
-
+                    PlaySoundAtPoint(jumpSFX, transform.position); // plays jump sound
                     isjumping = true;
                 }
                 anim.SetBool("Jump", true);
@@ -103,7 +112,7 @@ public class Player : MonoBehaviour
 
             ChangeDirection(-1);
         }
-        else
+        else // When player stops moving
         {
             StopMoving();
         }
@@ -114,10 +123,36 @@ public class Player : MonoBehaviour
     {
         anim.SetInteger("Speed", Mathf.Abs((int)myBody.velocity.x)); // Mathf.Abs retains either 0 or 1, so it can be useful when running animation
     }
+
     public void StopMoving() // Make player stop moving, and it can be access by other scripts
     {
         myBody.velocity = new Vector2(0f, myBody.velocity.y);
         AnimationStatus();
+    }
+
+    public void Killed()
+    {
+        FreezeCamera();
+        anim.SetBool("Killed", true);
+        myBody.velocity = new Vector2(myBody.velocity.x, jumpspeed); // When killed, player will jump
+        colliderBody.enabled = false; // disable 2d collider
+        PlaySoundAtPoint(deathSFX, transform.position); // plays death sound
+        StartCoroutine(RestartLevelAfterDelay());
+    }
+
+    public void FreezeCamera() // Freezes the camera when player died
+    {
+        if (cinemachineVirtualCamera != null)
+        {
+            cinemachineVirtualCamera.enabled = false; // Disable the Cinemachine Virtual Camera
+        }
+    }
+
+    private IEnumerator RestartLevelAfterDelay()
+    {
+        yield return new WaitForSeconds(delayBeforeRestart); // Wait for the specified delay
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 
     private void ChangeDirection(int direction) // changes the scale of the sprite left or right
@@ -125,5 +160,15 @@ public class Player : MonoBehaviour
         Vector3 tempScale = transform.localScale;
         tempScale.x = direction;
         transform.localScale = tempScale;
+    }
+
+    private void PlaySoundAtPoint(AudioClip clip, Vector3 position)
+    {
+        GameObject soundGameObject = new GameObject("CoinSound");
+        AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
+        audioSource.clip = clip;
+        audioSource.Play();
+
+        Destroy(soundGameObject, clip.length); // destroy the sound game object after the clip is done playing
     }
 }

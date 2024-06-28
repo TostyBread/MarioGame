@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,8 @@ public class VictoryZone : MonoBehaviour
             if (player != null)
             {
                 isPlayerWon = true;
-                player.hasWon = true; // Toggle hasWon to true
+                player.disableControl = true; // Toggle hasWon to true
+                player.FreezeCamera();
                 StartCoroutine(VictorySequence(player));
             }
         }
