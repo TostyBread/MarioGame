@@ -82,6 +82,7 @@ public class DamageOnTouch : MonoBehaviour
             {
                 //print("Damage on Top");
                 enemyMovement.isHit = true;
+                GameManager.instance.AddKill();
                 PlaySoundAtPoint(enemyKilledSFX, transform.position); // plays death sound
             }
             return;

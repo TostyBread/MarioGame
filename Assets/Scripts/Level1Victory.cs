@@ -9,6 +9,7 @@ public class VictoryZone : MonoBehaviour
     public AudioClip victoryMusic; // Victory music clip
     private float moveDuration = 2.8f; // Duration for moving the player
     private bool isPlayerWon = false; // To check if player has already won
+    public GameObject Scoreboard; // Display scoreboard
 
     private void OnTriggerEnter2D(Collider2D target)
     {
@@ -18,6 +19,7 @@ public class VictoryZone : MonoBehaviour
 
             if (player != null)
             {
+                GameManager.instance.ToggleUI();
                 isPlayerWon = true;
                 player.disableControl = true; // Toggle hasWon to true
                 player.FreezeCamera();
@@ -38,7 +40,7 @@ public class VictoryZone : MonoBehaviour
         // Move player to the right for moveDuration seconds
         while (elapsedTime < moveDuration)
         {
-            Debug.Log("Still walking");
+            //Debug.Log("Still walking");
             player.GetComponent<Rigidbody2D>().velocity = new Vector2(player.speed, originalVelocity.y);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -52,6 +54,6 @@ public class VictoryZone : MonoBehaviour
         yield return new WaitForSeconds(victoryMusic.length);
 
         // Load the next level (replace "NextLevel" with the actual name of the next level)
-        SceneManager.LoadScene("Level1");
+        GameManager.instance.WinGame();
     }
 }

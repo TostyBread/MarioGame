@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CoinCollider : MonoBehaviour
 {
-    [SerializeField] private CoinCounter coinCounter;
     public AudioClip coinSound; // coin collected sound
 
     private void OnTriggerEnter2D(Collider2D target) // when player touches the coin
@@ -14,8 +13,7 @@ public class CoinCollider : MonoBehaviour
             PlaySoundAtPoint(coinSound, transform.position); // plays a sound
             //print("Coins Collected");
 
-            coinCounter.AddCoin();
-
+            GameManager.instance.AddCoin(); // GameManager Records
             Destroy(gameObject); // destroy the coin after collected
         }
     }

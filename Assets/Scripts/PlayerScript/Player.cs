@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     Rigidbody2D myBody; //Rigidbody
     Animator anim; //animation
     public CinemachineVirtualCamera cinemachineVirtualCamera;
+    public GameObject weaponHolder; // Assign the weapon holder GameObject in the inspector
 
     public Transform RaycastCheck; //RaycastCheck
     public LayerMask RaycastGroundCheck; //The Layer that was to be checked
@@ -56,7 +57,6 @@ public class Player : MonoBehaviour
     {
         //Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
         
-        //isGrounded = Physics2D.Raycast(RaycastCheck.position, Vector2.down, 0.1f, RaycastGroundCheck); //Raycast check ground collision
         isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.33f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground 
 
         if (isGrounded && isjumping)
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
-            if (!disableControl) // check if player has won
+            if (!disableControl) // check if player hasnt won or killed
             {
                 if (isjumping == true)
                 {
@@ -86,8 +86,8 @@ public class Player : MonoBehaviour
                 else // if player isnt jumping
                 {
                     myBody.velocity = new Vector2(myBody.velocity.x, jumpspeed);
-                    PlaySoundAtPoint(jumpSFX, transform.position); // plays jump sound
                     isjumping = true;
+                    PlaySoundAtPoint(jumpSFX, transform.position); // plays jump sound
                 }
                 anim.SetBool("Jump", true);
             }
@@ -133,6 +133,7 @@ public class Player : MonoBehaviour
     public void Killed()
     {
         FreezeCamera();
+        GameManager.instance.AddDeath(); // GameManager Records
         anim.SetBool("Killed", true);
         myBody.velocity = new Vector2(myBody.velocity.x, jumpspeed); // When killed, player will jump
         colliderBody.enabled = false; // disable 2d collider
@@ -152,7 +153,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(delayBeforeRestart); // Wait for the specified delay
         Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
+        GameManager.instance.ResetLevel();
     }
 
     private void ChangeDirection(int direction) // changes the scale of the sprite left or right
@@ -160,6 +161,15 @@ public class Player : MonoBehaviour
         Vector3 tempScale = transform.localScale;
         tempScale.x = direction;
         transform.localScale = tempScale;
+
+        // Flip the weapon scale
+        Gun weapon = weaponHolder.GetComponentInChildren<Gun>();
+        if (weapon != null)
+        {
+            Vector3 weaponScale = weapon.transform.localScale;
+            weaponScale.x = Mathf.Abs(weaponScale.x) * direction;
+            weapon.transform.localScale = weaponScale;
+        }
     }
 
     private void PlaySoundAtPoint(AudioClip clip, Vector3 position)
