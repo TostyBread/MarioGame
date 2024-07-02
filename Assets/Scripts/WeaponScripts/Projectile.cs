@@ -11,30 +11,35 @@ public class Projectile : MonoBehaviour
     public AudioClip HitTrapsSFX;
 
     private TilemapHandler tilemapHandler;
+    DamageOnTouch damageOnTouch;
 
     void Start()
     {
-        Destroy(gameObject, lifetime);
-        tilemapHandler = FindObjectOfType<TilemapHandler>();
+        Destroy(gameObject, lifetime); // initiates the bullet and lifetime
+        tilemapHandler = FindObjectOfType<TilemapHandler>(); // find the tilemap handler
+        damageOnTouch = FindObjectOfType<DamageOnTouch>();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy")) // When hit enemy
         {
             Destroy(collision.gameObject);
             PlaySoundAtPoint(HitEnemySFX, transform.position);
-            GameManager.instance.AddKill();
+            if (!damageOnTouch.isDead) // If enemy isnt dead, it will add the kills into the scoreboard
+            {
+                GameManager.instance.AddKill();
+            }
             Destroy(gameObject);
         }
-        else if (collision.CompareTag("Traps"))
+        else if (collision.CompareTag("Traps")) // When hit traps
         {
             // Only remove the specific tile hit by the projectile
             tilemapHandler.RemoveTile(transform.position);
             PlaySoundAtPoint(HitTrapsSFX, transform.position);
             Destroy(gameObject);
         }
-        else if (collision.CompareTag("Ground"))
+        else if (collision.CompareTag("Ground")) // When hit ground
         {
             PlaySoundAtPoint(HitMiscSFX, transform.position);
             Destroy(gameObject);

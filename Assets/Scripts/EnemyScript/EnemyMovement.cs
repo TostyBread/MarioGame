@@ -10,7 +10,7 @@ public class EnemyMovement : MonoBehaviour
     private bool moveLeft = true;
     public bool isHit = false;
     public bool isShell = false; // Condition to check whether enemy is snail
-    private float bodyExpireTimer = 1.5f; // time till dead body despawn
+    private float bodyExpireTimer = 1f; // time till dead body despawn
     private float currentTime; // tracks with deltaTime
 
     Rigidbody2D enemyBody; //Rigidbody

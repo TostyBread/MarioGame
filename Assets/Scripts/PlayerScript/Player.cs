@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
     {
         //Debug.DrawRay(RaycastCheck.position, Vector2.down, Color.red, 0.1f); //Raycast Debug DrawRay
         
-        isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.33f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground 
+        isGrounded = Physics2D.CircleCast(RaycastCheck.position, 0.3f, Vector2.down, 0.1f, RaycastGroundCheck); // Circle Raycast check ground 
 
         if (isGrounded && isjumping)
         {

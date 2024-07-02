@@ -7,15 +7,13 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    WeaponAvailable spawnweapon;
 
     public int playerKills;
     public int coinsCollected;
     public int deathCount;
-    public int requiredCoinsForWeaponPickup;
-    public int MORETHANrequiredCoinsForWeaponPickup; // 2nd condition if player collects more coins
-    public GameObject weaponPickupPrefab;
-    public GameObject weaponPickupPrefabBETTER; // A better weapon when player collects more coins
-    public Transform weaponSpawnPoint;
+    public int requiredCoinsForWeaponPickup = 25;
+    public int MORETHANrequiredCoinsForWeaponPickup = 35; // 2nd condition if player collects more coins
 
     public TextMeshProUGUI killsText;
     public TextMeshProUGUI coinsText;
@@ -28,6 +26,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded; // Subscribe to the sceneLoaded event
         }
         else
         {
@@ -69,20 +68,6 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        if (coinsCollected >= requiredCoinsForWeaponPickup) // if player meets expectation
-        {
-            SpawnWeaponPickup();
-        }
-
-        if (coinsCollected >= MORETHANrequiredCoinsForWeaponPickup) // if player meets above expectation
-        {
-            SpawnBetterWeaponPickup();
-        }
-
-        playerKills = 0;
-        coinsCollected = 0;
-        deathCount = 0;
-
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
@@ -90,32 +75,42 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("No more scenes in Build Settings.");
+            SceneManager.LoadScene("MainMenu");
         }
 
         // Activate the UI elements when the game is won
         UpdateUI();
+        SetUIActive(false);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Find the WeaponAvailable component in the new scene
+        spawnweapon = GameObject.FindGameObjectWithTag("Weaponspawner")?.GetComponent<WeaponAvailable>();
+
+        // Only attempt to spawn the weapon if the player has collected enough coins and the WeaponAvailable component is found
+        if (spawnweapon != null)
+        {
+            if (coinsCollected >= requiredCoinsForWeaponPickup)
+            {
+                spawnweapon.SpawnWeaponPickup();
+            }
+
+            if (coinsCollected >= MORETHANrequiredCoinsForWeaponPickup)
+            {
+                spawnweapon.SpawnBetterWeaponPickup();
+            }
+        }
+
+        // Reset the scoreboard after the weapon is spawned
+        playerKills = 0;
+        coinsCollected = 0;
+        deathCount = 0;
     }
 
     public void ToggleUI()
     {
         SetUIActive(true);
-    }
-
-    private void SpawnWeaponPickup()
-    {
-        if (weaponSpawnPoint != null && weaponPickupPrefab != null)
-        {
-            Instantiate(weaponPickupPrefab, weaponSpawnPoint.position, Quaternion.identity);
-        }
-    }
-
-    private void SpawnBetterWeaponPickup()
-    {
-        if (weaponSpawnPoint != null && weaponPickupPrefabBETTER != null)
-        {
-            Instantiate(weaponPickupPrefabBETTER, weaponSpawnPoint.position, Quaternion.identity);
-        }
     }
 
     private void UpdateUI()
@@ -158,7 +153,13 @@ public class GameManager : MonoBehaviour
             uiImage.SetActive(isActive);
         }
     }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded; // Unsubscribe from the sceneLoaded event
+    }
 }
+
 
 
 
